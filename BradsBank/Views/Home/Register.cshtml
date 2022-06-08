@@ -1,11 +1,16 @@
-﻿@page
-@model BradsBank.Views.Home.RegisterModel
+﻿@model BradsBank.Views.Home.RegisterModel
 @{
 }
 
 <div class="text-center">
     <h2>Register</h2>
 
+    @if(Model.GetError == "passwords")
+    {
+        <p style="color: red"><b>The passwords did not match, please try again.</b></p>
+        <br />
+    }
+    
     <form action="~/Home/ValidateRegistration">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username"><br>

@@ -9,6 +9,28 @@ namespace BradsBank.Views.Home
 {
     public class RegisterModel : PageModel
     {
+        string m_Error = "none";
+
+        public RegisterModel(string? error = "none")
+        {
+            m_Error = error;
+        }
+
+        public string GetError
+        {
+            get
+            {
+                if(m_Error != null)
+                {
+                    return m_Error;
+                }
+                else
+                {
+                    return "none";
+                }
+            }
+        }
+
         public void OnGet()
         {
         }

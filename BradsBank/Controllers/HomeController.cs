@@ -1,4 +1,5 @@
 ﻿using BradsBank.Models;
+using BradsBank.Views.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -28,13 +29,20 @@ namespace BradsBank.Controllers
             return RedirectToAction("AccountActions", "Home", username);
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string error = "none")
         {
-            return View();
+            return View(new RegisterModel(error));
         }
 
         public IActionResult ValidateRegistration(string username, string password, string confirmed)
         {
+            if(password != confirmed)
+            {
+                string error = "passwords";
+
+                return RedirectToAction("Register", "Home", error);
+
+            }
             return RedirectToAction("AccountActions", "Home", username);
         }
 
