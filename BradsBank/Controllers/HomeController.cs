@@ -23,12 +23,22 @@ namespace BradsBank.Controllers
             return View();
         }
 
+        public IActionResult SignIn(string username, string password)
+        {
+            return RedirectToAction("AccountActions", "Home", username);
+        }
+
         public IActionResult Register()
         {
             return View();
         }
 
-        public IActionResult AccountActions()
+        public IActionResult ValidateRegistration(string username, string password, string confirmed)
+        {
+            return RedirectToAction("AccountActions", "Home", username);
+        }
+
+        public IActionResult AccountActions(string? username)
         {
             return View();
         }

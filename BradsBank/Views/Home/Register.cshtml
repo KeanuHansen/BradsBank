@@ -3,4 +3,18 @@
 @{
 }
 
-<h1>Create Register Form Here</h1>
+<div class="text-center">
+    <h2>Register</h2>
+
+    <form action="~/Home/ValidateRegistration">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password"><br>
+        <label for="confirmed">Confirm Password:</label><br>
+        <input type="text" id="confirmed" name="confirmed"><br><br>
+        <input type="submit" value="Submit">
+        <br />
+    </form>
+
+</div>
