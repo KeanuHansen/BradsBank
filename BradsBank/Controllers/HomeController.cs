@@ -23,6 +23,21 @@ namespace BradsBank.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult AccountActions()
+        {
+            return View();
+        }
+
+        public IActionResult Transactions()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

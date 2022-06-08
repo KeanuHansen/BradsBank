@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BradsBank", "BradsBank\BradsBank.csproj", "{DF95D28E-2E25-42EF-8FBA-64EAF86A0ACF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BradsBank", "BradsBank\BradsBank.csproj", "{DF95D28E-2E25-42EF-8FBA-64EAF86A0ACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
