@@ -15,6 +15,7 @@ namespace BradsBank
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            //here
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
