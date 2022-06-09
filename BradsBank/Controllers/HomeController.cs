@@ -26,6 +26,10 @@ namespace BradsBank.Controllers
 
         public IActionResult SignIn(string username, string password)
         {
+            int i = 1;
+            int j = 2;
+            int k = i + j;
+
             return RedirectToAction("AccountActions", "Home", username);
         }
 
@@ -43,6 +47,28 @@ namespace BradsBank.Controllers
                 return RedirectToAction("Register", "Home", error);
 
             }
+            return RedirectToAction("AccountActions", "Home", username);
+        }
+
+        public IActionResult DepositMoney(string username, string account, string amount)
+        {
+            // Do logic to add money
+
+            // Get the amount from the database
+            // make query to get current amount in this account before deposit, set to current_amount
+            double current_amount = 0;
+
+            // Add it by amount passed in
+            double new_amount = 0;
+            new_amount = current_amount + double.Parse(amount);
+
+            // Make the query
+            string sql = "";
+
+            sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
+
+            // Run the query
+
             return RedirectToAction("AccountActions", "Home", username);
         }
 
