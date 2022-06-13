@@ -60,7 +60,7 @@ namespace BradsBank.Controllers
             if(fromAmount < amount)
             {
                 Console.WriteLine("account does not have enough funds");
-                return;
+                return RedirectToAction("AccountActions", "Home", username);
             }
 
             //else, if the accoutFrom has enough money, give the client the money and subtract the amount from the balance of accountFrom
@@ -70,11 +70,9 @@ namespace BradsBank.Controllers
 
 
              Console.WriteLine($"Withdrawal of ${amount} was successful");
-            
-            
 
 
-
+            return RedirectToAction("AccountActions", "Home", username);
         }
 
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
@@ -87,7 +85,7 @@ namespace BradsBank.Controllers
             if(fromAmount < amount)
             {
                 Console.WriteLine("account does not have enough funds");
-                return;
+                return RedirectToAction("AccountActions", "Home", username);
             }
 
             //sql statement to get the amount on the second account (accountTo)
@@ -102,7 +100,7 @@ namespace BradsBank.Controllers
              Console.WriteLine("Transfered successfully");
 
             //Abdul's code ends here
-
+            return RedirectToAction("AccountActions", "Home", username);
         }
 
         public IActionResult DepositMoney(string username, string account, double amount)
@@ -113,10 +111,6 @@ namespace BradsBank.Controllers
             // sql query to get the current balance in the accout passed in and safe it in a variable called balance
             // balance = ?
 
-
-
-            
-
             // Do logic to add money
 
             // Get the amount from the database
@@ -124,13 +118,13 @@ namespace BradsBank.Controllers
             double current_amount = 0;
 
             //Abdul: should this be a doulbe? remember the rounding error that brad talked about?
-            double current_amount += amount;
+            current_amount += amount;
 
             //Abdul: update the amount into the database
 
             // Add it by amount passed in
             double new_amount = 0;
-            new_amount = current_amount + double.Parse(amount);
+            new_amount = current_amount + amount;
 
             // Make the query
             string sql = "";
