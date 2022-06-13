@@ -54,17 +54,17 @@ namespace BradsBank.Controllers
         {
             //Abdul start:
             //sql statement to get the balance in accountFrom and save it in accoutFrom
-            double accountFrom  = 0;
+            double fromAmount  = 0;
 
             //check if the account we are drawing money from has enough funds
-            if(accountFrom < amount)
+            if(fromAmount < amount)
             {
                 Console.WriteLine("account does not have enough funds");
                 return;
             }
 
             //else, if the accoutFrom has enough money, give the client the money and subtract the amount from the balance of accountFrom
-            accountFrom -= amount;
+            fromAmount -= amount;
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
 
@@ -81,10 +81,10 @@ namespace BradsBank.Controllers
         {
             //Abdul started writing:
             //sql statement to get the balance in accountFrom and save it in accoutFrom
-            double accountFrom  = 0;
+            double fromAmount  = 0;
 
             //check if the account we are drawing money from has enough funds
-            if(accountFrom < amount)
+            if(fromAmount < amount)
             {
                 Console.WriteLine("account does not have enough funds");
                 return;
@@ -94,8 +94,8 @@ namespace BradsBank.Controllers
             double accountTo = 0;
             
             // these variables hold the new balances for both accounts after the transfer
-            accountTo += amount;
-            accountFrom -= amount;
+            toAmount += amount;
+            fromAmount -= amount;
 
             //Send the data of updated balances for both accounts using sql
 
