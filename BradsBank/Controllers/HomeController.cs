@@ -50,13 +50,83 @@ namespace BradsBank.Controllers
             return RedirectToAction("AccountActions", "Home", username);
         }
 
-        public IActionResult DepositMoney(string username, string account, string amount)
+        public IActionResult WithdrawMoney (string username, string accountFrom, double amount)
         {
+            //Abdul start:
+            //sql statement to get the balance in accountFrom and save it in accoutFrom
+            double accountFrom  = 0;
+
+            //check if the account we are drawing money from has enough funds
+            if(accountFrom < amount)
+            {
+                Console.WriteLine("account does not have enough funds");
+                return;
+            }
+
+            //else, if the accoutFrom has enough money, give the client the money and subtract the amount from the balance of accountFrom
+            accountFrom -= amount;
+
+            //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
+
+
+             Console.WriteLine($"Withdrawal of ${amount} was successful");
+            
+            
+
+
+
+        }
+
+        public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
+        {
+            //Abdul started writing:
+            //sql statement to get the balance in accountFrom and save it in accoutFrom
+            double accountFrom  = 0;
+
+            //check if the account we are drawing money from has enough funds
+            if(accountFrom < amount)
+            {
+                Console.WriteLine("account does not have enough funds");
+                return;
+            }
+
+            //sql statement to get the amount on the second account (accountTo)
+            double accountTo = 0;
+            
+            // these variables hold the new balances for both accounts after the transfer
+            accountTo += amount;
+            accountFrom -= amount;
+
+            //Send the data of updated balances for both accounts using sql
+
+             Console.WriteLine("Transfered successfully");
+
+            //Abdul's code ends here
+
+        }
+
+        public IActionResult DepositMoney(string username, string account, double amount)
+        {
+
+            // Abdul:
+            
+            // sql query to get the current balance in the accout passed in and safe it in a variable called balance
+            // balance = ?
+
+
+
+            
+
             // Do logic to add money
 
             // Get the amount from the database
             // make query to get current amount in this account before deposit, set to current_amount
             double current_amount = 0;
+
+            //Abdul: should this be a doulbe? remember the rounding error that brad talked about?
+            double current_amount += amount;
+
+            //Abdul: update the amount into the database
 
             // Add it by amount passed in
             double new_amount = 0;
