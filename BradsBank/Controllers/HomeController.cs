@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BradsBank.Controllers
 {
@@ -19,6 +23,22 @@ namespace BradsBank.Controllers
             _logger = logger;
         }
 
+        public string hashingin256(string value)
+        {
+            StringBuilder Sb = new StringBuilder();
+
+            using (var hash = SHA256.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                byte[] result = hash.ComputeHash(enc.GetBytes(value));
+
+                foreach (byte b in result)
+                    Sb.Append(b.ToString("x2"));
+            }
+
+            return Sb.ToString();
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,9 +46,18 @@ namespace BradsBank.Controllers
 
         public IActionResult SignIn(string username, string password)
         {
-            int i = 1;
-            int j = 2;
-            int k = i + j;
+            // Query for the salt using the username
+
+            // Add the salt
+
+            // Hash the password
+            string hashedPass = hashingin256(password);
+
+            // Check the password against the database
+
+            // If it is right, pass it in
+
+            // If it is wrong, go back
 
             return RedirectToAction("AccountActions", "Home", username);
         }
