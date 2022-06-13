@@ -141,6 +141,21 @@ namespace BradsBank.Controllers
             return View();
         }
 
+        public IActionResult Deposit(string? username)
+        {
+            return View();
+        }
+
+        public IActionResult Withdraw(string? username)
+        {
+            return View();
+        }
+
+        public IActionResult Transfer(string? username)
+        {
+            return View();
+        }
+
         public IActionResult Transactions()
         {
             return View();
