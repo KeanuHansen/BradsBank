@@ -68,7 +68,6 @@ namespace BradsBank.Controllers
             sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
 
             // Run the query
-
             return RedirectToAction("AccountActions", "Home", username);
         }
 
