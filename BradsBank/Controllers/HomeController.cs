@@ -91,7 +91,7 @@ namespace BradsBank.Controllers
             }
 
             //sql statement to get the amount on the second account (accountTo)
-            double accountTo = 0;
+            double toAmount = 0;
             
             // these variables hold the new balances for both accounts after the transfer
             toAmount += amount;
