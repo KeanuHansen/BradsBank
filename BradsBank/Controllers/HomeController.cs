@@ -39,6 +39,24 @@ namespace BradsBank.Controllers
             return Sb.ToString();
         }
 
+        public string GetSalt()
+        {
+            var listofChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            var gettingStringOfChars = new char[3];
+
+            var randomVar = new Random();
+
+            for (int i = 0; i < gettingStringOfChars.Length; i++)
+            {
+                gettingStringOfChars[i] = listofChars[randomVar.Next(listofChars.Length)];
+            }
+
+            var stringResult = new String(gettingStringOfChars);
+
+            return stringResult;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -62,8 +80,20 @@ namespace BradsBank.Controllers
             return RedirectToAction("AccountActions", "Home", username);
         }
 
-        public IActionResult Register(string error = "none")
+        public IActionResult Register(string username, string password, string? error)
         {
+            // Query to see if the user exists
+
+            // If they do exist, return
+
+            // If not, get a salt
+
+            // Add it to the password
+
+            // Hash the password
+
+            // Insert the username, hashed password, salt
+
             return View(new RegisterModel(error));
         }
 
