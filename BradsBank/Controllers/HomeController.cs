@@ -127,17 +127,18 @@ namespace BradsBank.Controllers
         {
             //Abdul start:
 
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            SqlCommand db = new SqlCommand("SELECT count(*) FROM Users", connection);
+            var all = (int)db.ExecuteScalar();
+
+           
+
             //make amount in pennies
             amount /=100;
-
-
-            // create connection to the database
-            string connetionString;
-            SqlConnection cnn;
-            connetionString = @"Data Source=137.190.19.13;Initial Catalog=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
-            cnn = new SqlConnection(connetionString);
-            cnn.Open();
-            cnn.Close();
 
             //sql statement to get the balance in accountFrom and save it in accoutFrom
             //string sql = "Select currentbalance from account where account = ACCOUNTNUMBER";
@@ -146,20 +147,15 @@ namespace BradsBank.Controllers
 
             double fromAmount  = 0 /100;
 
-            //check if the account we are drawing money from has enough funds
-            if(fromAmount < amount)
-            {
-                Console.WriteLine("account does not have enough funds");
-                return RedirectToAction("AccountActions", "Home", username);
-
-            }
 
             string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
 
 
-             Console.WriteLine($"Withdrawal of ${amount} was successful");
+            Console.WriteLine($"Withdrawal of ${amount} was successful");
+
+            connection.Close();
 
 
             return RedirectToAction("AccountActions", "Home", username);
