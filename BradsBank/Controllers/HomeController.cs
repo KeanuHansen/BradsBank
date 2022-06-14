@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BradsBank.Controllers
 {
@@ -19,6 +23,40 @@ namespace BradsBank.Controllers
             _logger = logger;
         }
 
+        public string hashingin256(string value)
+        {
+            StringBuilder Sb = new StringBuilder();
+
+            using (var hash = SHA256.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                byte[] result = hash.ComputeHash(enc.GetBytes(value));
+
+                foreach (byte b in result)
+                    Sb.Append(b.ToString("x2"));
+            }
+
+            return Sb.ToString();
+        }
+
+        public string GetSalt()
+        {
+            var listofChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            var gettingStringOfChars = new char[3];
+
+            var randomVar = new Random();
+
+            for (int i = 0; i < gettingStringOfChars.Length; i++)
+            {
+                gettingStringOfChars[i] = listofChars[randomVar.Next(listofChars.Length)];
+            }
+
+            var stringResult = new String(gettingStringOfChars);
+
+            return stringResult;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -26,15 +64,36 @@ namespace BradsBank.Controllers
 
         public IActionResult SignIn(string username, string password)
         {
-            int i = 1;
-            int j = 2;
-            int k = i + j;
+            // Query for the salt using the username
+
+            // Add the salt
+
+            // Hash the password
+            string hashedPass = hashingin256(password);
+
+            // Check the password against the database
+
+            // If it is right, pass it in
+
+            // If it is wrong, go back
 
             return RedirectToAction("AccountActions", "Home", username);
         }
 
-        public IActionResult Register(string error = "none")
+        public IActionResult Register(string username, string password, string? error)
         {
+            // Query to see if the user exists
+
+            // If they do exist, return
+
+            // If not, get a salt
+
+            // Add it to the password
+
+            // Hash the password
+
+            // Insert the username, hashed password, salt
+
             return View(new RegisterModel(error));
         }
 
@@ -74,6 +133,13 @@ namespace BradsBank.Controllers
 
             double fromAmount  = 0 /100;
 
+            //check if the account we are drawing money from has enough funds
+            if(fromAmount < amount)
+            {
+                Console.WriteLine("account does not have enough funds");
+                return RedirectToAction("AccountActions", "Home", username);
+
+            }
 
             sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
 
@@ -125,6 +191,21 @@ namespace BradsBank.Controllers
         }
 
         public IActionResult AccountActions(string? username)
+        {
+            return View();
+        }
+
+        public IActionResult Deposit(string? username)
+        {
+            return View();
+        }
+
+        public IActionResult Withdraw(string? username)
+        {
+            return View();
+        }
+
+        public IActionResult Transfer(string? username)
         {
             return View();
         }
