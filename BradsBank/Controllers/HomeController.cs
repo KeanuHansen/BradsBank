@@ -11,16 +11,20 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
 
 namespace BradsBank.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration configuration;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration config)
         {
             _logger = logger;
+            this.configuration = config;
         }
 
         public string hashingin256(string value)
@@ -64,6 +68,16 @@ namespace BradsBank.Controllers
 
         public IActionResult SignIn(string username, string password)
         {
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            SqlCommand db = new SqlCommand("SELECT count(*) FROM Users", connection);
+            var all = (int)db.ExecuteScalar();
+
+            connection.Close();
+
             // Query for the salt using the username
 
             // Add the salt
