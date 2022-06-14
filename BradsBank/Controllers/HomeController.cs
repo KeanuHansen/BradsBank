@@ -8,9 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-using System.Drawing;
-using System.Data.SqlClient;
-using System.Text;
 namespace BradsBank.Controllers
 {
     public class HomeController : Controller
