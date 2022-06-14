@@ -137,7 +137,6 @@ namespace BradsBank.Controllers
             connetionString = @"Data Source=137.190.19.13;Initial Catalog=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
             cnn = new SqlConnection(connetionString);
             cnn.Open();
-            MessageBox.Show("Connection Open  !");
             cnn.Close();
 
             //sql statement to get the balance in accountFrom and save it in accoutFrom
@@ -155,7 +154,7 @@ namespace BradsBank.Controllers
 
             }
 
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
+            string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
 
@@ -169,9 +168,9 @@ namespace BradsBank.Controllers
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
         {
             //Abdul started writing:
-            
-             sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no);
-             sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
+            string sql;
+            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
+            sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
 
              Console.WriteLine("Transfered successfully");
 
@@ -183,20 +182,19 @@ namespace BradsBank.Controllers
         {
 
             // Abdul:
-            
+
             //insert into the database
 
+            string sql;
             sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
-
 
             //Abdul: update the amount into the database
 
             // Add it by amount passed in
             double new_amount = 0;
-            new_amount = current_amount + amount;
 
             // Make the query
-            string sql = "";
+            sql = "";
 
             sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
 
