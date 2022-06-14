@@ -8,6 +8,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
+using System.Drawing;
+using System.Data.SqlClient;
+using System.Text;
 namespace BradsBank.Controllers
 {
     public class HomeController : Controller
@@ -50,21 +53,32 @@ namespace BradsBank.Controllers
             return RedirectToAction("AccountActions", "Home", username);
         }
 
-        public IActionResult WithdrawMoney (string username, string accountFrom, double amount)
+        public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
         {
             //Abdul start:
+
+            //make amount in pennies
+            amount /=100;
+
+
+            // create connection to the database
+            string connetionString;
+            SqlConnection cnn;
+            connetionString = @"Data Source=137.190.19.13;Initial Catalog=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
+            cnn = new SqlConnection(connetionString);
+            cnn.Open();
+            MessageBox.Show("Connection Open  !");
+            cnn.Close();
+
             //sql statement to get the balance in accountFrom and save it in accoutFrom
-            double fromAmount  = 0;
+            //string sql = "Select currentbalance from account where account = ACCOUNTNUMBER";
 
-            //check if the account we are drawing money from has enough funds
-            if(fromAmount < amount)
-            {
-                Console.WriteLine("account does not have enough funds");
-                return RedirectToAction("AccountActions", "Home", username);
-            }
+            //exec.sql
 
-            //else, if the accoutFrom has enough money, give the client the money and subtract the amount from the balance of accountFrom
-            fromAmount -= amount;
+            double fromAmount  = 0 /100;
+
+
+            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
 
@@ -78,24 +92,9 @@ namespace BradsBank.Controllers
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
         {
             //Abdul started writing:
-            //sql statement to get the balance in accountFrom and save it in accoutFrom
-            double fromAmount  = 0;
-
-            //check if the account we are drawing money from has enough funds
-            if(fromAmount < amount)
-            {
-                Console.WriteLine("account does not have enough funds");
-                return RedirectToAction("AccountActions", "Home", username);
-            }
-
-            //sql statement to get the amount on the second account (accountTo)
-            double toAmount = 0;
             
-            // these variables hold the new balances for both accounts after the transfer
-            toAmount += amount;
-            fromAmount -= amount;
-
-            //Send the data of updated balances for both accounts using sql
+             sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no);
+             sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
 
              Console.WriteLine("Transfered successfully");
 
@@ -108,17 +107,10 @@ namespace BradsBank.Controllers
 
             // Abdul:
             
-            // sql query to get the current balance in the accout passed in and safe it in a variable called balance
-            // balance = ?
+            //insert into the database
 
-            // Do logic to add money
+            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
 
-            // Get the amount from the database
-            // make query to get current amount in this account before deposit, set to current_amount
-            double current_amount = 0;
-
-            //Abdul: should this be a doulbe? remember the rounding error that brad talked about?
-            current_amount += amount;
 
             //Abdul: update the amount into the database
 
