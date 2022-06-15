@@ -7,38 +7,44 @@
     //if transferbtn is clicked, run SQL
 </script>
 
-<css>
+<style>
+    .transfer {
+        margin-left: 100px;
+    }
+    .transferbtn {
+        font-weight: bold;
+    }
+</style>
 
-</css>
-
-
-<form>
-    <div class="selectaccount">
+<div class="transfer">
+    <form>
+        <div class="selectaccount">
+            <p>
+                <label for="acc">Transfer From</label>
+                <select name="acc" id="acc">
+                    <option>Account1</option>
+                    <option>Account2</option>
+                    <option>Account3</option>
+                </select>
+            </p>
+        </div>
+        <div class="selectaccount">
+            <p>
+                <label for="acc">To</label>
+                <select name="acc" id="acc">
+                    <option>Account1</option>
+                    <option>Account2</option>
+                    <option>Account3</option>
+                </select>
+            </p>
+        </div>
         <p>
-            <label for="acc">Transfer From</label>
-            <select name="acc" id="acc">
-                <option>Account1</option>
-                <option>Account2</option>
-                <option>Account3</option>
-            </select>
+            <label for="amount">Transfer Amount</label>
+            <input type="text" name="amount" id="transferamount">
         </p>
-    </div>
-    <div class="selectaccount">
-        <p>
-            <label for="acc">To</label>
-            <select name="acc" id="acc">
-                <option>Account1</option>
-                <option>Account2</option>
-                <option>Account3</option>
-            </select>
-        </p>
-    </div>
-    <p>
-        <label for="amount">Transfer Amount</label>
-        <input type="text" name="amount" id="transferamount">
-    </p>
-    <button class="transferbtn">Transfer</button>
-</form>
+        <button class="transferbtn">Transfer</button>
+    </form>
+</div>
 <!--
 
     If they choose transfer show a certain form for transfer
