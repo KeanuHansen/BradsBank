@@ -35,33 +35,35 @@ $mysqli->close();
 ?>
 -->
 
-<section>
-    <h1>Transactions</h1>
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Account</th>
-            <th>Amount</th>
-        </tr>
+<div class="text-center">
+    <section>
+        <h1>Transactions</h1>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Account</th>
+                <th>Amount</th>
+            </tr>
 
-        <!--
-        <?php
-        while($rows=$result->fetch_assoc())
-        {
-        ?>
-        <tr>
-            <td><?php echo $rows['date'];?></td>
-            <td><?php echo $rows['type'];?></td>
-            <td><?php echo $rows['account'];?></td>
-            <td><?php echo $rows['amount'];?></td>
-        </tr>
-        <?php
-        }
-        ?>
-        -->
-    </table>
-</section>
+            <!--
+            <?php
+            while($rows=$result->fetch_assoc())
+            {
+            ?>
+            <tr>
+                <td><?php echo $rows['date'];?></td>
+                <td><?php echo $rows['type'];?></td>
+                <td><?php echo $rows['account'];?></td>
+                <td><?php echo $rows['amount'];?></td>
+            </tr>
+            <?php
+            }
+            ?>
+            -->
+        </table>
+    </section>
+</div>
 <!--
 
 Based on a dropdown menu
