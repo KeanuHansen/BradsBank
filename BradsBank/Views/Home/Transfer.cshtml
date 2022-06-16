@@ -5,8 +5,8 @@
 
 <script>
     //if transferbtn is clicked, run SQL
-    //SELECT [TransferAccount1], [TransferAccount2] FROM [accountTable] Where [account = transferAccount1/AND account2] ... 
-    //Update balance in Acc1 & Acc2
+    //SELECT [TransferAccount1], [TransferAccount2] FROM [Account] Where [account = transferAccount1/AND account2] ... 
+    //Update CurrentBalance in Acc1 & Acc2
     //update [TransactionTable]
 </script>
 
@@ -21,23 +21,23 @@
 
 <div class="transfer">
     <form>
-        <div class="selectaccount">
+        <div class="selectaccount1">
             <p>
                 <label for="acc">Transfer From</label><br>
                 <select name="acc" id="acc">
-                    <option>Account1</option>
-                    <option>Account2</option>
-                    <option>Account3</option>
+                    <option class="op1" value="savings">Savings</option>
+                    <option class="op2" value="checking">Checking</option>
+                    <option class="op3" value="cc">Credit Card</option>
                 </select><br>
             </p>
         </div>
-        <div class="selectaccount">
+        <div class="selectaccount2">
             <p>
                 <label for="acc">To</label><br>
                 <select name="acc" id="acc">
-                    <option>Account1</option>
-                    <option>Account2</option>
-                    <option>Account3</option>
+                    <option class="op1" value="savings">Savings</option>
+                    <option class="op2" value="checking">Checking</option>
+                    <option class="op3" value="cc">Credit Card</option>
                 </select><br>
             </p>
         </div>

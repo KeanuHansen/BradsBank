@@ -149,9 +149,9 @@ namespace BradsBank.Controllers
             var hashedPassword = hashingin256(saltedPassword);
 
             // Insert the username, hashed password, salt
-            string checkForUser = String.Format("INSERT INTO users (username, password, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
-            db = new SqlCommand(checkUserExistsQuery, connection);
-            db.ExecuteNonQuery();
+            string checkForUser = String.Format("INSERT INTO users (username, hashedpassword, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
+            db = new SqlCommand(checkForUser, connection);
+            var tryit = db.ExecuteScalar();
 
             connection.Close();
 
