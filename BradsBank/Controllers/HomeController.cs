@@ -248,7 +248,8 @@ namespace BradsBank.Controllers
 
         public IActionResult AccountActions(string? username)
         {
-            return View();
+            // Pass the variable into the model
+            return View(new AccountActionsModel(username));
         }
 
         public IActionResult Deposit(string? username)
