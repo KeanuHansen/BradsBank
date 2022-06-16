@@ -132,8 +132,15 @@ namespace BradsBank.Controllers
             SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
-            SqlCommand db = new SqlCommand("SELECT count(*) FROM Users", connection);
+
+            //write the sql query as a string
+            string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
+
+            //execute the sql query
+            SqlCommand db = new SqlCommand(sql, connection);
             var all = (int)db.ExecuteScalar();
+             
+
 
            
 
@@ -148,7 +155,7 @@ namespace BradsBank.Controllers
             double fromAmount  = 0 /100;
 
 
-            string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
+
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
 
