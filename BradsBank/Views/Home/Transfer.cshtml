@@ -4,41 +4,50 @@
 }
 
 <script>
-
+    //if transferbtn is clicked, run SQL
+    //SELECT [TransferAccount1], [TransferAccount2] FROM [Account] Where [account = transferAccount1/AND account2] ... 
+    //Update CurrentBalance in Acc1 & Acc2
+    //update [TransactionTable]
 </script>
 
-<css>
+<style>
+    .transfer {
+        margin-left: 100px;
+    }
+    .transferbtn {
+        font-weight: bold;
+    }
+</style>
 
-</css>
-
-
-<form>
-    <div class="selectaccount">
+<div class="transfer">
+    <form>
+        <div class="selectaccount1">
+            <p>
+                <label for="acc">Transfer From</label><br>
+                <select name="acc" id="acc">
+                    <option class="op1">Savings</option>
+                    <option class="op2">Checking</option>
+                    <option class="op3">Credit Card</option>
+                </select><br>
+            </p>
+        </div>
+        <div class="selectaccount2">
+            <p>
+                <label for="acc">To</label><br>
+                <select name="acc" id="acc">
+                    <option class="op1">Savings</option>
+                    <option class="op2">Checking</option>
+                    <option class="op3">Credit Card</option>
+                </select><br>
+            </p>
+        </div>
         <p>
-            <label for="acc">Transfer From</label>
-            <select name="acc" id="acc">
-                <option>Account1</option>
-                <option>Account2</option>
-                <option>Account3</option>
-            </select>
+            <label for="amount">Transfer Amount</label><br>
+            <input type="text" name="amount" id="transferamount"><br><br>
         </p>
-    </div>
-    <div class="selectaccount">
-        <p>
-            <label for="acc">To</label>
-            <select name="acc" id="acc">
-                <option>Account1</option>
-                <option>Account2</option>
-                <option>Account3</option>
-            </select>
-        </p>
-    </div>
-    <p>
-        <label for="amount">Transfer Amount</label>
-        <input type="text" name="amount" id="transferamount">
-    </p>
-    <button class="submit">Transfer</button>
-</form>
+        <button class="transferbtn">Transfer</button>
+    </form>
+</div>
 <!--
 
     If they choose transfer show a certain form for transfer

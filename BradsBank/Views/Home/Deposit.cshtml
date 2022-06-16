@@ -4,30 +4,41 @@
 }
 
 <script>
-
+    //if depositbtn is clicked, run deposit SQL
+    //SELECT [depositAccount] FROM [accountTable] Where [account = depositAccount] ... 
+    //update CurrentBalance
+    //update [Transactions]
 </script>
 
-<css>
+<style>
+    .deposit {
+        margin-left: 100px;
+    }
 
-</css>
+    .depositbtn {
+        font-weight: bold;
+    }
+</style>
 
-<form>
-    <div class="selectaccount">
+<div class="deposit">
+    <form>
+        <div class="selectaccount">
+            <p>
+                <label for="acc">Deposit To</label><br>
+                <select name="acc" id="acc">
+                    <option class="op1">Savings</option>
+                    <option class="op2">Checking</option>
+                    <option class="op3">Credit Card</option>
+                </select><br>
+            </p>
+        </div>
         <p>
-            <label for="acc">Deposit To</label>
-            <select name="acc" id="acc">
-                <option>Account1</option>
-                <option>Account2</option>
-                <option>Account3</option>
-            </select>
+            <label for="amount">Deposit Amount</label><br>
+            <input type="text" name="amount" id="depositamount"><br><br>
         </p>
-    </div>
-    <p>
-        <label for="amount">Deposit Amount</label>
-        <input type="text" name="amount" id="depositamount">
-    </p>
-    <button class="submit">Deposit</button>
-</form>
+        <button class="depositbtn">Deposit</button>
+    </form>
+</div>
 <!--
 
     JavaScript
