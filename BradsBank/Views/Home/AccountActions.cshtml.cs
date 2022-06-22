@@ -19,6 +19,14 @@ namespace BradsBank.Views.Home
             m_User = username;
         }
 
+        public string Username
+        {
+            get
+            {
+                return m_User;
+            }
+        }
+
         public void OnGet()
         {
         }

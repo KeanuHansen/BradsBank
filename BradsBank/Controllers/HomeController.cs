@@ -287,35 +287,40 @@ namespace BradsBank.Controllers
         {
             if (username != null)
             {
-                return View();
+                return View(new DepositModel(username));
             }
 
-            return View();
+            return View(new DepositModel(username));
         }
 
         public IActionResult Withdraw(string? username)
         {
             if (username != null)
             {
-                return View();
+                return View(new WithdrawModel(username));
             }
 
-            return View();
+            return View(new WithdrawModel(username));
         }
 
         public IActionResult Transfer(string? username)
         {
             if (username != null)
             {
-                return View();
+                return View(new TransferModel(username));
             }
 
-            return View();
+            return View(new TransferModel(username));
         }
 
-        public IActionResult Transactions()
+        public IActionResult Transactions(string? username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new TransactionsModel(username));
+            }
+
+            return View(new TransactionsModel(username));
         }
 
         public IActionResult Privacy()
