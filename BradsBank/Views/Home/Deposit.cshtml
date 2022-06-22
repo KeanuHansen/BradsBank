@@ -39,6 +39,8 @@
 
 <div class="deposit">
     <form action="~/Home/DepositMoney">
+        <input type="hidden" name="username" value="@Model.Username" />
+
         <div class="selectaccount">
             <p>
                 <label for="acc">Deposit To</label>

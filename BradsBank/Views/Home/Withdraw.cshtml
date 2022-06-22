@@ -38,7 +38,9 @@
 </style>
 
 <div class="withdraw">
-    <form>
+    <form action="~/Home/WithdrawMoney">
+        <input type="hidden" name="username" value="@Model.Username" />
+
         <div class="selectaccount">
             <p>
                 <label for="acc">Withdraw From</label>

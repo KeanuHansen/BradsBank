@@ -38,7 +38,9 @@
 </style>
 
 <div class="transfer">
-    <form>
+    <form action="~/Home/TransferMoney">
+        <input type="hidden" name="username" value="@Model.Username" />
+
         <div class="selectaccount1">
             <p>
                 <label for="acc">Transfer From</label>
