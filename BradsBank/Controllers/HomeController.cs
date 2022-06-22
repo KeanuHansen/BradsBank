@@ -216,7 +216,6 @@ namespace BradsBank.Controllers
 
                 Console.WriteLine($"Withdrawal of ${amount} was successful");
 
-
                 return RedirectToAction("AccountActions", "Home", username);
             }
 
@@ -272,7 +271,7 @@ namespace BradsBank.Controllers
 
         }
 
-        public IActionResult AccountActions(string? username)
+        public IActionResult AccountActions(string username)
         {
             if(username != null)
             {
