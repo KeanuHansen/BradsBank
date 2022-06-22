@@ -177,7 +177,7 @@ namespace BradsBank.Controllers
             return View(new SignInModel());
         }
 
-        public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
+        public IActionResult WithdrawMoney (string username, string account, int amount)
         {
             if(username != null)
             {
