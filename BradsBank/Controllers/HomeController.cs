@@ -68,94 +68,103 @@ namespace BradsBank.Controllers
 
         public IActionResult SignInValidation(string username, string password)
         {
-            // Query to see if the user exists
-            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
-
-            SqlConnection connection = new SqlConnection(connectionString);
-
-            connection.Open();
-            string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
-            SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
-            var countUser = (int)db.ExecuteScalar();
-
-            // If they do exist, return
-            if (countUser == 0)
+            if(username != null)
             {
-                connection.Close();
-                return RedirectToAction("SignIn", "Home", "Username");
+                // Query to see if the user exists
+                string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+                SqlConnection connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
+                SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
+                var countUser = (int)db.ExecuteScalar();
+
+                // If they do exist, return
+                if (countUser == 0)
+                {
+                    connection.Close();
+                    return RedirectToAction("SignIn", "Home", "Username");
+                }
+
+                // If not, get a salt
+                string getSaltQuery = String.Format("SELECT Salt FROM Users WHERE Username = '{0}' ", username);
+                db = new SqlCommand(getSaltQuery, connection);
+                var getSalt = (string)db.ExecuteScalar();
+
+                // Add it to the password
+                var saltedPassword = password + getSalt;
+
+                // Hash the password
+                var hashedPassword = hashingin256(saltedPassword);
+
+                // Insert the username, hashed password, salt
+                string checkForUser = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' AND HashedPassword = '{1}' ", username, hashedPassword);
+                db = new SqlCommand(checkForUser, connection);
+                var checkResult = (int)db.ExecuteScalar();
+
+                if (checkResult > 0)
+                {
+                    // Close the database
+                    connection.Close();
+
+                    return RedirectToAction("AccountActions", "Home", username);
+                }
+                else
+                {
+                    connection.Close();
+                    return RedirectToAction("SignIn", "Home", "Password");
+                }
             }
-
-            // If not, get a salt
-            string getSaltQuery = String.Format("SELECT Salt FROM Users WHERE Username = '{0}' ", username);
-            db = new SqlCommand(getSaltQuery, connection);
-            var getSalt = (string)db.ExecuteScalar();
-
-            // Add it to the password
-            var saltedPassword = password + getSalt;
-
-            // Hash the password
-            var hashedPassword = hashingin256(saltedPassword);
-
-            // Insert the username, hashed password, salt
-            string checkForUser = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' AND HashedPassword = '{1}' ", username, hashedPassword);
-            db = new SqlCommand(checkForUser, connection);
-            var checkResult = (int)db.ExecuteScalar();
-
-            if (checkResult > 0)
-            {
-                // Close the database
-                connection.Close();
-
-                return RedirectToAction("AccountActions", "Home", username);
-            }
-            else
-            {
-                connection.Close();
-                return RedirectToAction("SignIn", "Home", "Password");
-            }
+            return RedirectToAction("SignIn", "Home", "Username");
         }
 
         public IActionResult ValidateRegistration(string username, string password, string confirmed, string first, string last, string email)
         {
-            if(password != confirmed)
+            if(username != null)
             {
-                return RedirectToAction("Register", "Home", "MistmatchedPassword");
-            }
+                if (password != confirmed)
+                {
+                    return RedirectToAction("Register", "Home", "MistmatchedPassword");
+                }
 
-            // Query to see if the user exists
-            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+                // Query to see if the user exists
+                string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
-            SqlConnection connection = new SqlConnection(connectionString);
+                SqlConnection connection = new SqlConnection(connectionString);
 
-            connection.Open();
-            string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
-            SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
-            var countUser = (int)db.ExecuteScalar();
+                connection.Open();
+                string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
+                SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
+                var countUser = (int)db.ExecuteScalar();
 
-            // If they do exist, return
-            if(countUser > 0)
-            {
+                // If they do exist, return
+                if (countUser > 0)
+                {
+                    connection.Close();
+                    return RedirectToAction("Register", "Home", "UserExists");
+                }
+
+                // If not, get a salt
+                string getSalt = GetSalt();
+
+                // Add it to the password
+                var saltedPassword = password + getSalt;
+
+                // Hash the password
+                var hashedPassword = hashingin256(saltedPassword);
+
+                // Insert the username, hashed password, salt
+                string checkForUser = String.Format("INSERT INTO users (username, hashedpassword, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
+                db = new SqlCommand(checkForUser, connection);
+                var tryit = db.ExecuteScalar();
+
                 connection.Close();
-                return RedirectToAction("Register", "Home", "UserExists");
+
+                return RedirectToAction("AccountActions", "Home", username);
             }
 
-            // If not, get a salt
-            string getSalt = GetSalt();
-
-            // Add it to the password
-            var saltedPassword = password + getSalt;
-
-            // Hash the password
-            var hashedPassword = hashingin256(saltedPassword);
-
-            // Insert the username, hashed password, salt
-            string checkForUser = String.Format("INSERT INTO users (username, hashedpassword, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
-            db = new SqlCommand(checkForUser, connection);
-            var tryit = db.ExecuteScalar();
-
-            connection.Close();
-
-            return RedirectToAction("AccountActions", "Home", username);
+            return RedirectToAction("Register", "Home", "UserExists");
         }
 
         public IActionResult Register()
@@ -170,100 +179,137 @@ namespace BradsBank.Controllers
 
         public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
         {
-            //Abdul start:
-
-            //make amount in pennies
-            amount /=100;
-
-
-            // create connection to the database
-            string connetionString;
-            SqlConnection cnn;
-            connetionString = @"Data Source=137.190.19.13;Initial Catalog=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
-            cnn = new SqlConnection(connetionString);
-            cnn.Open();
-            cnn.Close();
-
-            //sql statement to get the balance in accountFrom and save it in accoutFrom
-            //string sql = "Select currentbalance from account where account = ACCOUNTNUMBER";
-
-            //exec.sql
-
-            double fromAmount  = 0 /100;
-
-            //check if the account we are drawing money from has enough funds
-            if(fromAmount < amount)
+            if(username != null)
             {
-                Console.WriteLine("account does not have enough funds");
+                //Abdul start:
+
+                //make amount in pennies
+                amount /= 100;
+
+
+                // create connection to the database
+                string connetionString;
+                SqlConnection cnn;
+                connetionString = @"Data Source=137.190.19.13;Initial Catalog=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
+                cnn = new SqlConnection(connetionString);
+                cnn.Open();
+                cnn.Close();
+
+                //sql statement to get the balance in accountFrom and save it in accoutFrom
+                //string sql = "Select currentbalance from account where account = ACCOUNTNUMBER";
+
+                //exec.sql
+
+                double fromAmount = 0 / 100;
+
+                //check if the account we are drawing money from has enough funds
+                if (fromAmount < amount)
+                {
+                    Console.WriteLine("account does not have enough funds");
+                    return RedirectToAction("AccountActions", "Home", username);
+                }
+
+                string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
+
+                //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
+
+
+                Console.WriteLine($"Withdrawal of ${amount} was successful");
+
+
                 return RedirectToAction("AccountActions", "Home", username);
             }
-
-            string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
-
-            //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
-
-
-             Console.WriteLine($"Withdrawal of ${amount} was successful");
-
 
             return RedirectToAction("AccountActions", "Home", username);
         }
 
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
         {
-            //Abdul started writing:
-            string sql;
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
+            if(username != null)
+            {
 
-             Console.WriteLine("Transfered successfully");
+                //Abdul started writing:
+                string sql;
+                sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
+                sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
 
-            //Abdul's code ends here
+                Console.WriteLine("Transfered successfully");
+
+                //Abdul's code ends here
+                return RedirectToAction("AccountActions", "Home", username);
+            }
+
             return RedirectToAction("AccountActions", "Home", username);
+
         }
 
         public IActionResult DepositMoney(string username, string account, double amount)
         {
+            if(username != null)
+            {
+                // Abdul:
 
-            // Abdul:
+                //insert into the database
 
-            //insert into the database
+                string sql;
+                sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
 
-            string sql;
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
+                //Abdul: update the amount into the database
 
-            //Abdul: update the amount into the database
+                // Add it by amount passed in
+                double new_amount = 0;
 
-            // Add it by amount passed in
-            double new_amount = 0;
+                // Make the query
+                sql = "";
 
-            // Make the query
-            sql = "";
+                sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
 
-            sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
+                // Run the query
+                return RedirectToAction("AccountActions", "Home", username);
+            }
 
-            // Run the query
             return RedirectToAction("AccountActions", "Home", username);
+
         }
 
         public IActionResult AccountActions(string? username)
         {
+            if(username != null)
+            {
+                return View(new AccountActionsModel(username));
+            }
+
             // Pass the variable into the model
             return View(new AccountActionsModel(username));
         }
 
         public IActionResult Deposit(string? username)
         {
+            if (username != null)
+            {
+                return View();
+            }
+
             return View();
         }
 
         public IActionResult Withdraw(string? username)
         {
+            if (username != null)
+            {
+                return View();
+            }
+
             return View();
         }
 
         public IActionResult Transfer(string? username)
         {
+            if (username != null)
+            {
+                return View();
+            }
+
             return View();
         }
 
