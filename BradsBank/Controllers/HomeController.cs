@@ -253,8 +253,8 @@ namespace BradsBank.Controllers
             SqlCommand db1 = new SqlCommand(transQuery1, connection);
             SqlCommand db2 = new SqlCommand(transQuery2, connection);
 
-            var t1 = (int)db1.ExecuteScalar();
-            var t2 = (int)db2.ExecuteScalar();
+            db1.ExecuteNonQuery();
+            db2.ExecuteNonQuery();
 
             //string sql;
             //sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
