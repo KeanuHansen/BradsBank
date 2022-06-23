@@ -259,39 +259,7 @@ namespace BradsBank.Controllers
 
         public IActionResult DepositMoney(string username, string account, double amount)
         {
-            if(username != null)
-            {
-                // Abdul:
 
-            //convert the amount from dollars into pennies
-            amount *= 100;
-
-            //withdraw cash query
-            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
-
-            SqlConnection connection = new SqlConnection(connectionString);
-
-            connection.Open();
-            string depoQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'deposit')", account, amount);
-            SqlCommand db = new SqlCommand(depoQuery, connection);
-            var deposit = (int)db.ExecuteScalar();
-
-            string sql;
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
-
-            Console.WriteLine("Transfered successfully");
-
-            connection.Close();
-
-            // Make the query
-            sql = "";
-
-            sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
-
-            return RedirectToAction("AccountActions", "Home", username);
-        }
-
-            return RedirectToAction("AccountActions", "Home", username);
 
         }
 
