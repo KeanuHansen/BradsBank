@@ -260,7 +260,7 @@ namespace BradsBank.Controllers
         public IActionResult DepositMoney(string username, string account, double amount)
         {
 
-            return RedirectToAction("AccountActions", "Home", username)
+            return RedirectToAction("AccountActions", "Home", username);
         }
 
         public IActionResult AccountActions(string username)
