@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -187,99 +186,81 @@ namespace BradsBank.Controllers
             return View(new SignInModel());
         }
 
-        public IActionResult WithdrawMoney (string username, string account, int amount)
+        public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
         {
-            if(username != null)
-            {
-                //Abdul start:
-
-                //make amount in pennies
-                amount /= 100;
+            //Abdul start:
 
 
-                // create connection to the database
-                string connetionString;
-                SqlConnection cnn;
-                connetionString = @"Data Source=137.190.19.13;Initial Catalog=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
-                cnn = new SqlConnection(connetionString);
-                cnn.Open();
-                cnn.Close();
+            //convert the amount into  pennies in order to store it into the database first
 
-                //sql statement to get the balance in accountFrom and save it in accoutFrom
-                //string sql = "Select currentbalance from account where account = ACCOUNTNUMBER";
+            amount *= 100;
 
-                //exec.sql
+            //withdraw cash query
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
-                double fromAmount = 0 / 100;
+            SqlConnection connection = new SqlConnection(connectionString);
 
-                //check if the account we are drawing money from has enough funds
-                if (fromAmount < amount)
-                {
-                    Console.WriteLine("account does not have enough funds");
-                    return RedirectToAction("AccountActions", "Home", username);
-                }
+            connection.Open();
+            string withdrawQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'Withdrawal')", accountFrom, amount);
+            SqlCommand db = new SqlCommand(withdrawQuery, connection);
+            var withdraw = (int)db.ExecuteScalar();
 
-                string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
-
-                //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
+            //make amount in dollars before displaying it
+            amount /= 100;
 
 
-                Console.WriteLine($"Withdrawal of ${amount} was successful");
 
-                string goTo = string.Format("/home/accountactions?username={0}", username);
-                return Redirect(goTo);
-            }
+            //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
+
+
+            Console.WriteLine($"Withdrawal of ${amount} was successful");
+
+            connection.Close();
+
+
 
             return RedirectToAction("AccountActions", "Home", username);
         }
 
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
         {
-            if(username != null)
-            {
+            //Abdul started writing:
 
-                //Abdul started writing:
-                string sql;
-                sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
-                sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
+            //convert from dollars to pennies first
+            amount *= 100;
 
-                Console.WriteLine("Transfered successfully");
+            //withdraw cash query
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
-                //Abdul's code ends here
-                return RedirectToAction("AccountActions", "Home", username);
-            }
+            SqlConnection connection = new SqlConnection(connectionString);
 
+            connection.Open();
+            string transQuery1 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', transfer from '{2}')", accountFrom, -amount, accountFrom);
+            string transQuery2 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', transfer to '{2}')", accountTo, amount, accountTo);
+            SqlCommand db1 = new SqlCommand(transQuery1, connection);
+            SqlCommand db2 = new SqlCommand(transQuery2, connection);
+
+            var t1 = (int)db1.ExecuteScalar();
+            var t2 = (int)db2.ExecuteScalar();
+
+            //string sql;
+            //sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
+            //sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
+
+            Console.WriteLine("Transfered successfully");
+
+            connection.Close();
+
+
+
+            //Abdul's code ends here
             return RedirectToAction("AccountActions", "Home", username);
-
         }
 
         public IActionResult DepositMoney(string username, string account, double amount)
         {
-            if(username != null)
-            {
-                // Abdul:
 
-                //insert into the database
-
-                string sql;
-                sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
-
-                //Abdul: update the amount into the database
-
-                // Add it by amount passed in
-                double new_amount = 0;
-
-                // Make the query
-                sql = "";
-
-                sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
-
-                // Run the query
-                return RedirectToAction("AccountActions", "Home", username);
-            }
-
-            return RedirectToAction("AccountActions", "Home", username);
-
+            return RedirectToAction("AccountActions", "Home", username)
         }
 
         public IActionResult AccountActions(string username)
