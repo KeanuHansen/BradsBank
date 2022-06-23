@@ -38,14 +38,16 @@
 </style>
 
 <div class="withdraw">
-    <form>
+    <form action="~/Home/WithdrawMoney">
+        <input type="hidden" name="username" value="@Model.Username" />
+
         <div class="selectaccount">
             <p>
-                <label for="acc">Withdraw From</label>
-                <select name="acc" id="acc">
+                <label for="account">Withdraw From</label>
+                <select name="account" id="account">
                     <option class="op1" value="savings">Savings</option>
                     <option class="op2" value="checking">Checking</option>
-                    <option class="op3" value="cc">Credit Card</option>
+                    <option class="op3" value="creditcard">Credit Card</option>
                 </select>
             </p>
         </div>

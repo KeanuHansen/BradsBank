@@ -177,7 +177,7 @@ namespace BradsBank.Controllers
             return View(new SignInModel());
         }
 
-        public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
+        public IActionResult WithdrawMoney (string username, string account, int amount)
         {
             if(username != null)
             {
@@ -215,7 +215,6 @@ namespace BradsBank.Controllers
 
 
                 Console.WriteLine($"Withdrawal of ${amount} was successful");
-
 
                 return RedirectToAction("AccountActions", "Home", username);
             }
@@ -272,7 +271,7 @@ namespace BradsBank.Controllers
 
         }
 
-        public IActionResult AccountActions(string? username)
+        public IActionResult AccountActions(string username)
         {
             if(username != null)
             {
@@ -287,35 +286,40 @@ namespace BradsBank.Controllers
         {
             if (username != null)
             {
-                return View();
+                return View(new DepositModel(username));
             }
 
-            return View();
+            return View(new DepositModel(username));
         }
 
         public IActionResult Withdraw(string? username)
         {
             if (username != null)
             {
-                return View();
+                return View(new WithdrawModel(username));
             }
 
-            return View();
+            return View(new WithdrawModel(username));
         }
 
         public IActionResult Transfer(string? username)
         {
             if (username != null)
             {
-                return View();
+                return View(new TransferModel(username));
             }
 
-            return View();
+            return View(new TransferModel(username));
         }
 
-        public IActionResult Transactions()
+        public IActionResult Transactions(string? username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new TransactionsModel(username));
+            }
+
+            return View(new TransactionsModel(username));
         }
 
         public IActionResult Privacy()
