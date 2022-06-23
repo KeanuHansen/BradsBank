@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,23 @@ namespace BradsBank.Views.Home
             get
             {
                 return m_User;
+            }
+        }
+
+        public string AmountOfMoney
+        {
+            get
+            {
+                SqlConnection connection = new SqlConnection("Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd");
+
+                connection.Open();
+
+                string query = String.Format("");
+                SqlCommand db = new SqlCommand(query, connection);
+                var amount = (Int16)db.ExecuteScalar();
+                connection.Close();
+
+                return "";
             }
         }
 
