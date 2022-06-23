@@ -261,6 +261,27 @@ namespace BradsBank.Controllers
         {
 
 
+
+            //convert the amount from dollars into pennies
+            amount *= 100;
+
+            //withdraw cash query
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            string depoQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'deposit')", account, amount);
+            SqlCommand db = new SqlCommand(depoQuery, connection);
+            var deposit = (int)db.ExecuteScalar();
+
+
+            Console.WriteLine("Transfered successfully");
+
+            connection.Close();
+
+            return RedirectToAction("AccountActions", "Home", username);
+
         }
 
         public IActionResult AccountActions(string username)
