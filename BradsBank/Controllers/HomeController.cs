@@ -240,8 +240,16 @@ namespace BradsBank.Controllers
             SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
-            string transQuery1 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', transfer from '{2}')", accountFrom, -amount, accountFrom);
-            string transQuery2 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', transfer to '{2}')", accountTo, amount, accountTo);
+            string getAccountNumber = String.Format("SELECT ACCOUNT FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = '{1}';", username, accountFrom);
+            SqlCommand db = new SqlCommand(getAccountNumber, connection);
+            var accountNumberFrom = (Int16)db.ExecuteScalar();
+
+            string getAccountNumberTo = String.Format("SELECT ACCOUNT FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = '{1}';", username, accountTo);
+            db = new SqlCommand(getAccountNumberTo, connection);
+            var accountNumberTo = (Int16)db.ExecuteScalar();
+
+            string transQuery1 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'transfer from {2}')", accountNumberFrom, -amount, accountNumberFrom);
+            string transQuery2 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'transfer to {2}')", accountNumberTo, amount, accountNumberTo);
             SqlCommand db1 = new SqlCommand(transQuery1, connection);
             SqlCommand db2 = new SqlCommand(transQuery2, connection);
 
