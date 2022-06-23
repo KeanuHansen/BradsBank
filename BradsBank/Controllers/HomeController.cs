@@ -27,6 +27,15 @@ namespace BradsBank.Controllers
             this.configuration = config;
         }
 
+        public class User
+        {
+            public string name
+            {
+                get;
+                set;
+            }
+        }
+            
         public string hashingin256(string value)
         {
             StringBuilder Sb = new StringBuilder();
@@ -108,7 +117,8 @@ namespace BradsBank.Controllers
                     // Close the database
                     connection.Close();
 
-                    return RedirectToAction("AccountActions", "Home", username);
+                    string goTo = string.Format("/home/accountactions?username={0}", username);
+                    return Redirect(goTo);
                 }
                 else
                 {
@@ -216,7 +226,8 @@ namespace BradsBank.Controllers
 
                 Console.WriteLine($"Withdrawal of ${amount} was successful");
 
-                return RedirectToAction("AccountActions", "Home", username);
+                string goTo = string.Format("/home/accountactions?username={0}", username);
+                return Redirect(goTo);
             }
 
             return RedirectToAction("AccountActions", "Home", username);
@@ -273,7 +284,7 @@ namespace BradsBank.Controllers
 
         public IActionResult AccountActions(string username)
         {
-            if(username != null)
+            if (username != null)
             {
                 return View(new AccountActionsModel(username));
             }
