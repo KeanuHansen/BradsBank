@@ -1,5 +1,4 @@
-﻿@page
-@model BradsBank.Views.Home.TransactionsModel
+﻿@model BradsBank.Views.Home.TransactionsModel
 @{
 }
 
@@ -30,16 +29,47 @@ $result = $mysqli->query($sql);
 $mysqli->close();
 ?>
 -->
+<style>
+    table, th, td {
+        border: 1px solid black;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        height: 30px;
+        width: 700px;
+    }
+</style>
 
 <div class="text-center">
     <section>
-        <h1>Transactions</h1>
+        <h1>Transactions</h1><br>
         <table>
             <tr>
                 <th>Date</th>
                 <th>Type</th>
                 <th>Account</th>
                 <th>Amount</th>
+            </tr>
+
+            <tr>
+                <td>mm/dd/yyyy</td>
+                <td>Example</td>
+                <td>Account1</td>
+                <td>$0.00</td>
+            </tr>
+
+            <tr>
+                <td>mm/dd/yyyy</td>
+                <td>Example</td>
+                <td>Account2</td>
+                <td>$0.00</td>
+            </tr>
+
+            <tr>
+                <td>mm/dd/yyyy</td>
+                <td>Example</td>
+                <td>Account1 -> Account3</td>
+                <td>$0.00</td>
             </tr>
 
             <!--

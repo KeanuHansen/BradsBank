@@ -26,6 +26,15 @@ namespace BradsBank.Controllers
             this.configuration = config;
         }
 
+        public class User
+        {
+            public string name
+            {
+                get;
+                set;
+            }
+        }
+            
         public string hashingin256(string value)
         {
             StringBuilder Sb = new StringBuilder();
@@ -67,96 +76,104 @@ namespace BradsBank.Controllers
 
         public IActionResult SignInValidation(string username, string password)
         {
-            // Query to see if the user exists
-            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
-
-            SqlConnection connection = new SqlConnection(connectionString);
-
-            connection.Open();
-            string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
-            SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
-            var countUser = (int)db.ExecuteScalar();
-
-            // If they do exist, return
-            if (countUser == 0)
+            if(username != null)
             {
-                connection.Close();
-                return RedirectToAction("SignIn", "Home", "Username");
+                // Query to see if the user exists
+                string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+                SqlConnection connection = new SqlConnection(connectionString);
+
+                connection.Open();
+                string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
+                SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
+                var countUser = (int)db.ExecuteScalar();
+
+                // If they do exist, return
+                if (countUser == 0)
+                {
+                    connection.Close();
+                    return RedirectToAction("SignIn", "Home", "Username");
+                }
+
+                // If not, get a salt
+                string getSaltQuery = String.Format("SELECT Salt FROM Users WHERE Username = '{0}' ", username);
+                db = new SqlCommand(getSaltQuery, connection);
+                var getSalt = (string)db.ExecuteScalar();
+
+                // Add it to the password
+                var saltedPassword = password + getSalt;
+
+                // Hash the password
+                var hashedPassword = hashingin256(saltedPassword);
+
+                // Insert the username, hashed password, salt
+                string checkForUser = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' AND HashedPassword = '{1}' ", username, hashedPassword);
+                db = new SqlCommand(checkForUser, connection);
+                var checkResult = (int)db.ExecuteScalar();
+
+                if (checkResult > 0)
+                {
+                    // Close the database
+                    connection.Close();
+
+                    string goTo = string.Format("/home/accountactions?username={0}", username);
+                    return Redirect(goTo);
+                }
+                else
+                {
+                    connection.Close();
+                    return RedirectToAction("SignIn", "Home", "Password");
+                }
             }
-
-            // If not, get a salt
-            string getSaltQuery = String.Format("SELECT Salt FROM Users WHERE Username = '{0}' ", username);
-            db = new SqlCommand(getSaltQuery, connection);
-            var getSalt = (string)db.ExecuteScalar();
-
-            // Add it to the password
-            var saltedPassword = password + getSalt;
-
-            // Hash the password
-            var hashedPassword = hashingin256(saltedPassword);
-
-            // Insert the username, hashed password, salt
-            string checkForUser = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' AND HashedPassword = '{1}' ", username, hashedPassword);
-            db = new SqlCommand(checkForUser, connection);
-            var checkResult = (int)db.ExecuteScalar();
-
-            if (checkResult > 0)
-            {
-                // Close the database
-                connection.Close();
-
-                return RedirectToAction("AccountActions", "Home", username);
-            }
-            else
-            {
-                connection.Close();
-                return RedirectToAction("SignIn", "Home", "Password");
-            }
+            return RedirectToAction("SignIn", "Home", "Username");
         }
 
         public IActionResult ValidateRegistration(string username, string password, string confirmed, string first, string last, string email)
         {
-
-           // WithdrawMoney("mike", 123, )
-            if(password != confirmed)
+            if(username != null)
             {
-                return RedirectToAction("Register", "Home", "MistmatchedPassword");
-            }
+                if (password != confirmed)
+                {
+                    return RedirectToAction("Register", "Home", "MistmatchedPassword");
+                }
 
-            // Query to see if the user exists
-            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+                // Query to see if the user exists
+                string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
-            SqlConnection connection = new SqlConnection(connectionString);
+                SqlConnection connection = new SqlConnection(connectionString);
 
-            connection.Open();
-            string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
-            SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
-            var countUser = (int)db.ExecuteScalar();
+                connection.Open();
+                string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
+                SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
+                var countUser = (int)db.ExecuteScalar();
 
-            // If they do exist, return
-            if(countUser > 0)
-            {
+                // If they do exist, return
+                if (countUser > 0)
+                {
+                    connection.Close();
+                    return RedirectToAction("Register", "Home", "UserExists");
+                }
+
+                // If not, get a salt
+                string getSalt = GetSalt();
+
+                // Add it to the password
+                var saltedPassword = password + getSalt;
+
+                // Hash the password
+                var hashedPassword = hashingin256(saltedPassword);
+
+                // Insert the username, hashed password, salt
+                string checkForUser = String.Format("INSERT INTO users (username, hashedpassword, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
+                db = new SqlCommand(checkForUser, connection);
+                var tryit = db.ExecuteScalar();
+
                 connection.Close();
-                return RedirectToAction("Register", "Home", "UserExists");
+
+                return RedirectToAction("AccountActions", "Home", username);
             }
 
-            // If not, get a salt
-            string getSalt = GetSalt();
-
-            // Add it to the password
-            var saltedPassword = password + getSalt;
-
-            // Hash the password
-            var hashedPassword = hashingin256(saltedPassword);
-
-            // Insert the username, hashed password, salt
-            string checkForUser = String.Format("INSERT INTO users (username, password, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
-            db = new SqlCommand(checkUserExistsQuery, connection);
-            db.ExecuteNonQuery();
-
-            connection.Close();
-
-            return RedirectToAction("AccountActions", "Home", username);
+            return RedirectToAction("Register", "Home", "UserExists");
         }
 
         public IActionResult Register()
@@ -242,8 +259,9 @@ namespace BradsBank.Controllers
 
         public IActionResult DepositMoney(string username, string account, double amount)
         {
-
-            // Abdul:
+            if(username != null)
+            {
+                // Abdul:
 
             //convert the amount from dollars into pennies
             amount *= 100;
@@ -258,39 +276,74 @@ namespace BradsBank.Controllers
             SqlCommand db = new SqlCommand(depoQuery, connection);
             var deposit = (int)db.ExecuteScalar();
 
+            string sql;
+            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
 
             Console.WriteLine("Transfered successfully");
 
             connection.Close();
 
+            // Make the query
+            sql = "";
 
+            sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
 
             return RedirectToAction("AccountActions", "Home", username);
         }
 
-        public IActionResult AccountActions(string? username)
+            return RedirectToAction("AccountActions", "Home", username);
+
+        }
+
+        public IActionResult AccountActions(string username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new AccountActionsModel(username));
+            }
+
+            // Pass the variable into the model
+            return View(new AccountActionsModel(username));
         }
 
         public IActionResult Deposit(string? username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new DepositModel(username));
+            }
+
+            return View(new DepositModel(username));
         }
 
         public IActionResult Withdraw(string? username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new WithdrawModel(username));
+            }
+
+            return View(new WithdrawModel(username));
         }
 
         public IActionResult Transfer(string? username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new TransferModel(username));
+            }
+
+            return View(new TransferModel(username));
         }
 
-        public IActionResult Transactions()
+        public IActionResult Transactions(string? username)
         {
-            return View();
+            if (username != null)
+            {
+                return View(new TransactionsModel(username));
+            }
+
+            return View(new TransactionsModel(username));
         }
 
         public IActionResult Privacy()

@@ -9,6 +9,24 @@ namespace BradsBank.Views.Home
 {
     public class TransferModel : PageModel
     {
+        // Global Variable
+        private string m_User;
+
+        // Receive all the variables you pass in
+        public TransferModel(string? username = "none")
+        {
+            // Assign them to global variables
+            m_User = username;
+        }
+
+        public string Username
+        {
+            get
+            {
+                return m_User;
+            }
+        }
+
         public void OnGet()
         {
         }
