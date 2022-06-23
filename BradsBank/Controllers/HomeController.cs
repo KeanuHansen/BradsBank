@@ -248,8 +248,8 @@ namespace BradsBank.Controllers
             db = new SqlCommand(getAccountNumberTo, connection);
             var accountNumberTo = (Int16)db.ExecuteScalar();
 
-            string transQuery1 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'transfer from {2}')", accountNumberFrom, -amount, accountNumberFrom);
-            string transQuery2 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'transfer to {2}')", accountNumberTo, amount, accountNumberTo);
+            string transQuery1 = String.Format("insert into Transactions (account, amount, tranDesc) values ({0}, {1}, 'transfer from {2}')", accountNumberFrom, -amount, accountNumberFrom);
+            string transQuery2 = String.Format("insert into Transactions (account, amount, tranDesc) values ({0}, {1}, 'transfer to {2}')", accountNumberTo, amount, accountNumberTo);
             SqlCommand db1 = new SqlCommand(transQuery1, connection);
             SqlCommand db2 = new SqlCommand(transQuery2, connection);
 
