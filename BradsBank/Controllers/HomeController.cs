@@ -201,9 +201,14 @@ namespace BradsBank.Controllers
             SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
-            string withdrawQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'Withdrawal')", accountFrom, amount);
-            SqlCommand db = new SqlCommand(withdrawQuery, connection);
-            var withdraw = (int)db.ExecuteScalar();
+
+            string getAccountNumber = String.Format("SELECT ACCOUNT FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = '{1}';", username, accountFrom);
+            SqlCommand db = new SqlCommand(getAccountNumber, connection);
+            var accountNumber = (Int16)db.ExecuteScalar();
+
+            string withdrawQuery = String.Format("insert into Transactions (account, amount, transDesc) values ({0}, {1}, 'withdrawal')", accountNumber, amount);
+            db = new SqlCommand(withdrawQuery, connection);
+            db.ExecuteNonQuery();
 
             //make amount in dollars before displaying it
             amount /= 100;
