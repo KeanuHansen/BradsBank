@@ -259,9 +259,6 @@ namespace BradsBank.Controllers
 
         public IActionResult DepositMoney(string username, string account, double amount)
         {
-
-
-
             //convert the amount from dollars into pennies
             amount *= 100;
 
@@ -271,7 +268,7 @@ namespace BradsBank.Controllers
             SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
-            string depoQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'deposit')", account, amount);
+            string depoQuery = String.Format("insert into Transactions (account, amount, transDesc) values ('{0}', '{1}', 'deposit')", account, amount);
             SqlCommand db = new SqlCommand(depoQuery, connection);
             var deposit = (int)db.ExecuteScalar();
 
