@@ -1,0 +1,29 @@
+﻿@model BradsBank.Views.Home.SignInModel
+@{
+}
+
+<div class="text-center">
+    <h2>Sign In</h2>
+
+    @if (Model.GetError == "Password")
+    {
+        <p style="color: red"><b>The passwords did not match, please try again.</b></p>
+        <br />
+    }
+    else if (Model.GetError == "Username")
+    {
+        <p style="color: red"><b>The username was incorrect or does not exist, please try again.</b></p>
+        <br />
+    }
+
+    <form action="~/Home/SignInValidation">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password"><br><br>
+        <input type="submit" value="Submit">
+        <br /><br />
+        <a href="~/Home/Register">Register New Account</a>
+    </form>
+
+</div>

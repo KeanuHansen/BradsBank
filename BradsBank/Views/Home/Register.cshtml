@@ -5,12 +5,17 @@
 <div class="text-center">
     <h2>Register</h2>
 
-    @if(Model.GetError == "passwords")
+    @if (Model.GetError == "MistmatchedPassword")
     {
         <p style="color: red"><b>The passwords did not match, please try again.</b></p>
         <br />
     }
-    
+    else if (Model.GetError == "UserExists")
+    {
+        <p style="color: red"><b>The user already exists, please try again.</b></p>
+        <br />
+    }
+
     <form action="~/Home/ValidateRegistration">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username"><br>

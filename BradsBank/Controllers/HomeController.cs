@@ -66,61 +66,106 @@ namespace BradsBank.Controllers
             return View();
         }
 
-        public IActionResult SignIn(string username, string password)
+        public IActionResult SignInValidation(string username, string password)
         {
+            // Query to see if the user exists
             string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
             SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
-            SqlCommand db = new SqlCommand("SELECT count(*) FROM Users", connection);
-            var all = (int)db.ExecuteScalar();
-
-            connection.Close();
-
-            // Query for the salt using the username
-
-            // Add the salt
-
-            // Hash the password
-            string hashedPass = hashingin256(password);
-
-            // Check the password against the database
-
-            // If it is right, pass it in
-
-            // If it is wrong, go back
-
-            return RedirectToAction("AccountActions", "Home", username);
-        }
-
-        public IActionResult Register(string username, string password, string? error)
-        {
-            // Query to see if the user exists
+            string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
+            SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
+            var countUser = (int)db.ExecuteScalar();
 
             // If they do exist, return
+            if (countUser == 0)
+            {
+                connection.Close();
+                return RedirectToAction("SignIn", "Home", "Username");
+            }
 
             // If not, get a salt
+            string getSaltQuery = String.Format("SELECT Salt FROM Users WHERE Username = '{0}' ", username);
+            db = new SqlCommand(getSaltQuery, connection);
+            var getSalt = (string)db.ExecuteScalar();
 
             // Add it to the password
+            var saltedPassword = password + getSalt;
 
             // Hash the password
+            var hashedPassword = hashingin256(saltedPassword);
 
             // Insert the username, hashed password, salt
+            string checkForUser = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' AND HashedPassword = '{1}' ", username, hashedPassword);
+            db = new SqlCommand(checkForUser, connection);
+            var checkResult = (int)db.ExecuteScalar();
 
-            return View(new RegisterModel(error));
+            if (checkResult > 0)
+            {
+                // Close the database
+                connection.Close();
+
+                return RedirectToAction("AccountActions", "Home", username);
+            }
+            else
+            {
+                connection.Close();
+                return RedirectToAction("SignIn", "Home", "Password");
+            }
         }
 
-        public IActionResult ValidateRegistration(string username, string password, string confirmed)
+        public IActionResult ValidateRegistration(string username, string password, string confirmed, string first, string last, string email)
         {
             if(password != confirmed)
             {
-                string error = "passwords";
-
-                return RedirectToAction("Register", "Home", error);
-
+                return RedirectToAction("Register", "Home", "MistmatchedPassword");
             }
+
+            // Query to see if the user exists
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            string checkUserExistsQuery = String.Format("SELECT COUNT(*) FROM Users WHERE Username = '{0}' ", username);
+            SqlCommand db = new SqlCommand(checkUserExistsQuery, connection);
+            var countUser = (int)db.ExecuteScalar();
+
+            // If they do exist, return
+            if(countUser > 0)
+            {
+                connection.Close();
+                return RedirectToAction("Register", "Home", "UserExists");
+            }
+
+            // If not, get a salt
+            string getSalt = GetSalt();
+
+            // Add it to the password
+            var saltedPassword = password + getSalt;
+
+            // Hash the password
+            var hashedPassword = hashingin256(saltedPassword);
+
+            // Insert the username, hashed password, salt
+            string checkForUser = String.Format("INSERT INTO users (username, password, salt, firstname, lastname, email) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}') ", username, hashedPassword, getSalt, first, last, email);
+            db = new SqlCommand(checkUserExistsQuery, connection);
+            db.ExecuteNonQuery();
+
+            connection.Close();
+
             return RedirectToAction("AccountActions", "Home", username);
+        }
+
+        public IActionResult Register()
+        {
+            return View(new RegisterModel());
+        }
+
+        public IActionResult SignIn()
+        {
+            return View(new SignInModel());
         }
 
         public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
@@ -154,7 +199,13 @@ namespace BradsBank.Controllers
 
             double fromAmount  = 0 /100;
 
+            //check if the account we are drawing money from has enough funds
+            if(fromAmount < amount)
+            {
+                Console.WriteLine("account does not have enough funds");
+                return RedirectToAction("AccountActions", "Home", username);
 
+            }
 
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
