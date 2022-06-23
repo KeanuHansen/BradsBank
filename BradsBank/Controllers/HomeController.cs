@@ -170,7 +170,8 @@ namespace BradsBank.Controllers
 
                 connection.Close();
 
-                return RedirectToAction("AccountActions", "Home", username);
+                string goTo = string.Format("/home/accountactions?username={0}", username);
+                return Redirect(goTo);
             }
 
             return RedirectToAction("Register", "Home", "UserExists");
