@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
@@ -117,6 +116,8 @@ namespace BradsBank.Controllers
 
         public IActionResult ValidateRegistration(string username, string password, string confirmed, string first, string last, string email)
         {
+
+           // WithdrawMoney("mike", 123, )
             if(password != confirmed)
             {
                 return RedirectToAction("Register", "Home", "MistmatchedPassword");
@@ -172,40 +173,24 @@ namespace BradsBank.Controllers
         {
             //Abdul start:
 
+
+            //convert the amount into  pennies in order to store it into the database first
+
+            amount *= 100;
+
+            //withdraw cash query
             string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
             SqlConnection connection = new SqlConnection(connectionString);
 
             connection.Open();
+            string withdrawQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'Withdrawal')", accountFrom, amount);
+            SqlCommand db = new SqlCommand(withdrawQuery, connection);
+            var withdraw = (int)db.ExecuteScalar();
 
-            //write the sql query as a string
-            string sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, withdraw)";
+            //make amount in dollars before displaying it
+            amount /= 100;
 
-            //execute the sql query
-            SqlCommand db = new SqlCommand(sql, connection);
-            var all = (int)db.ExecuteScalar();
-             
-
-
-           
-
-            //make amount in pennies
-            amount /=100;
-
-            //sql statement to get the balance in accountFrom and save it in accoutFrom
-            //string sql = "Select currentbalance from account where account = ACCOUNTNUMBER";
-
-            //exec.sql
-
-            double fromAmount  = 0 /100;
-
-            //check if the account we are drawing money from has enough funds
-            if(fromAmount < amount)
-            {
-                Console.WriteLine("account does not have enough funds");
-                return RedirectToAction("AccountActions", "Home", username);
-
-            }
 
 
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
@@ -216,17 +201,40 @@ namespace BradsBank.Controllers
             connection.Close();
 
 
+
             return RedirectToAction("AccountActions", "Home", username);
         }
 
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
         {
             //Abdul started writing:
-            string sql;
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
 
-             Console.WriteLine("Transfered successfully");
+            //convert from dollars to pennies first
+            amount *= 100;
+
+            //withdraw cash query
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
+
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            connection.Open();
+            string transQuery1 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', transfer from '{2}')", accountFrom, -amount, accountFrom);
+            string transQuery2 = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', transfer to '{2}')", accountTo, amount, accountTo);
+            SqlCommand db1 = new SqlCommand(transQuery1, connection);
+            SqlCommand db2 = new SqlCommand(transQuery2, connection);
+
+            var t1 = (int)db1.ExecuteScalar();
+            var t2 = (int)db2.ExecuteScalar();
+
+            //string sql;
+            //sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, transfer from accout no)";
+            //sql = "insert into Transactions (account, amount, tranDesc) values (account number, -amount, transfer from accout no)";
+
+            Console.WriteLine("Transfered successfully");
+
+            connection.Close();
+
+
 
             //Abdul's code ends here
             return RedirectToAction("AccountActions", "Home", username);
@@ -237,22 +245,26 @@ namespace BradsBank.Controllers
 
             // Abdul:
 
-            //insert into the database
+            //convert the amount from dollars into pennies
+            amount *= 100;
 
-            string sql;
-            sql = "insert into Transactions (account, amount, tranDesc) values (account number, amount, deposit)";
+            //withdraw cash query
+            string connectionString = configuration.GetConnectionString("DefaultConnectionString");
 
-            //Abdul: update the amount into the database
+            SqlConnection connection = new SqlConnection(connectionString);
 
-            // Add it by amount passed in
-            double new_amount = 0;
+            connection.Open();
+            string depoQuery = String.Format("insert into Transactions (account, amount, tranDesc) values ('{0}', '{1}', 'deposit')", account, amount);
+            SqlCommand db = new SqlCommand(depoQuery, connection);
+            var deposit = (int)db.ExecuteScalar();
 
-            // Make the query
-            sql = "";
 
-            sql += String.Format("UPDATE accounts SET amount = {0}", new_amount);
+            Console.WriteLine("Transfered successfully");
 
-            // Run the query
+            connection.Close();
+
+
+
             return RedirectToAction("AccountActions", "Home", username);
         }
 
