@@ -207,7 +207,7 @@ namespace BradsBank.Controllers
             SqlCommand db = new SqlCommand(getAccountNumber, connection);
             var accountNumber = (Int16)db.ExecuteScalar();
 
-            string withdrawQuery = String.Format("insert into Transactions (account, amount, transDesc) values ({0}, {1}, 'withdrawal')", accountNumber, amount);
+            string withdrawQuery = String.Format("insert into Transactions (account, amount, transDesc) values ({0}, {1}, 'withdrawal')", accountNumber, -amount);
             db = new SqlCommand(withdrawQuery, connection);
             db.ExecuteNonQuery();
 
@@ -225,7 +225,8 @@ namespace BradsBank.Controllers
 
 
 
-            return RedirectToAction("AccountActions", "Home", username);
+            string goTo = string.Format("/home/accountactions?username={0}", username);
+            return Redirect(goTo);
         }
 
         public IActionResult TransferMoney (string username, string accountFrom, string accountTo, double amount)
@@ -268,7 +269,8 @@ namespace BradsBank.Controllers
 
 
             //Abdul's code ends here
-            return RedirectToAction("AccountActions", "Home", username);
+            string goTo = string.Format("/home/accountactions?username={0}", username);
+            return Redirect(goTo);
         }
 
         public IActionResult DepositMoney(string username, string account, double amount)
@@ -296,7 +298,8 @@ namespace BradsBank.Controllers
 
             connection.Close();
 
-            return RedirectToAction("AccountActions", "Home", username);
+            string goTo = string.Format("/home/accountactions?username={0}", username);
+            return Redirect(goTo);
 
         }
 
