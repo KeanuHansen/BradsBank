@@ -47,15 +47,15 @@ namespace BradsBank.Views.Home
                 connection.Open();
                 //Read from the database
 
-                string getTable = String.Format("SELECT COUNT(*) FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}'  ", m_User);
+                string getTable = String.Format("SELECT * FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}'  ", m_User);
 
                 if (m_Type == "none")
                 {
-                    getTable = String.Format("SELECT COUNT(*) FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}'  ", m_User);
+                    getTable = String.Format("SELECT * FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}'  ", m_User);
                 }
                 else
                 {
-                    getTable = String.Format("SELECT COUNT(*) FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.AccountType = '{0}' AND Account.Username = '{1}'  ", m_Type, m_User);
+                    getTable = String.Format("SELECT * FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.AccountType = '{0}' AND Account.Username = '{1}'  ", m_Type, m_User);
                 }
                 SqlCommand command = new SqlCommand(getTable, connection);
 
