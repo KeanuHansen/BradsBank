@@ -28,7 +28,7 @@ namespace BradsBank.Views.Home
             }
         }
 
-        public string AmountOfMoney
+        public string AmountSavings
         {
             get
             {
@@ -36,12 +36,52 @@ namespace BradsBank.Views.Home
 
                 connection.Open();
 
-                string query = String.Format("");
+                string query = String.Format("SELECT CURRENTBALANCE FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = 'Savings' ", m_User);
                 SqlCommand db = new SqlCommand(query, connection);
-                var amount = (Int16)db.ExecuteScalar();
+                var amount = (Int64)db.ExecuteScalar();
+                var amountDiv = double.Parse(amount.ToString()) / 100;
+                string returnAmount = Math.Round(amountDiv, 2).ToString();
                 connection.Close();
 
-                return "";
+                return returnAmount.ToString();
+            }
+        }
+
+        public string AmountCheckings
+        {
+            get
+            {
+                SqlConnection connection = new SqlConnection("Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd");
+
+                connection.Open();
+
+                string query = String.Format("SELECT CURRENTBALANCE FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = 'Checking' ", m_User);
+                SqlCommand db = new SqlCommand(query, connection);
+                var amount = (Int64)db.ExecuteScalar();
+                var amountDiv = double.Parse(amount.ToString()) / 100;
+                string returnAmount = Math.Round(amountDiv, 2).ToString();
+                connection.Close();
+
+                return returnAmount.ToString();
+            }
+        }
+
+        public string AmountCredit
+        {
+            get
+            {
+                SqlConnection connection = new SqlConnection("Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd");
+
+                connection.Open();
+
+                string query = String.Format("SELECT CURRENTBALANCE FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = 'Credit Card' ", m_User);
+                SqlCommand db = new SqlCommand(query, connection);
+                var amount = (Int64)db.ExecuteScalar();
+                var amountDiv = double.Parse(amount.ToString()) / 100;
+                string returnAmount = Math.Round(amountDiv, 2).ToString();
+                connection.Close();
+
+                return returnAmount.ToString();
             }
         }
 
