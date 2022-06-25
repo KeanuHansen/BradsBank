@@ -58,9 +58,10 @@ namespace BradsBank.Views.Home
                 connection.Open();
                 //Read from the database
 
+                //ROUND(Transactions.AMOUNT/100,2) as AMOUNT
                 string getTable = String.Format("SELECT Transactions.BUSINESSDATE, Account.ACCOUNTTYPE, Transactions.AMOUNT, Transactions.BALANCEAFTER, Transactions.TRANSDESC FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}' ORDER BY Transactions.BUSINESSDATE DESC ", m_User);
 
-                if (m_Type == "none")
+                if (m_Type == "none" || m_Type == "All")
                 {
                     getTable = String.Format("SELECT Transactions.BUSINESSDATE, Account.ACCOUNTTYPE, Transactions.AMOUNT, Transactions.BALANCEAFTER, Transactions.TRANSDESC FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}' ORDER BY Transactions.BUSINESSDATE DESC ", m_User);
                 }
@@ -84,9 +85,11 @@ namespace BradsBank.Views.Home
 
                     // Amount
                     var amount = dataReader[2].ToString();
+                    amount = Math.Round(double.Parse(amount) / 100, 2).ToString();
 
                     // Balance After
                     var after = dataReader[3].ToString();
+                    after = Math.Round(double.Parse(after) / 100, 2).ToString();
 
                     // Description
                     var description = dataReader[4].ToString();
