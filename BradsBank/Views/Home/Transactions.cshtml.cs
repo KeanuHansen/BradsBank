@@ -22,6 +22,11 @@ namespace BradsBank.Views.Home
             // Assign them to global variables
             m_User = username;
             m_Type = type;
+
+            if(m_Type == "CreditCard")
+            {
+                m_Type = "Credit Card";
+            }
         }
 
         public string Username
