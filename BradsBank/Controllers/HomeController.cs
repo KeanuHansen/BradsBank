@@ -312,6 +312,17 @@ namespace BradsBank.Controllers
 
         }
 
+        public IActionResult TransactionsActions(string username)
+        {
+            if (username != null)
+            {
+                return View(new TransactionsActionsModel(username));
+            }
+
+            // Pass the variable into the model
+            return View(new TransactionsActionsModel(username));
+        }
+
         public IActionResult AccountActions(string username)
         {
             if (username != null)
@@ -353,14 +364,14 @@ namespace BradsBank.Controllers
             return View(new TransferModel(username));
         }
 
-        public IActionResult Transactions(string? username)
+        public IActionResult Transactions(string? username, string? type = "none")
         {
             if (username != null)
             {
-                return View(new TransactionsModel(username));
+                return View(new TransactionsModel(username, type));
             }
 
-            return View(new TransactionsModel(username));
+            return View(new TransactionsModel(username, type));
         }
 
         public IActionResult Privacy()
