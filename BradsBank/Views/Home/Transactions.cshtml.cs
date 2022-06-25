@@ -14,12 +14,14 @@ namespace BradsBank.Views.Home
     {
         // Global Variable
         private string m_User;
+        private string m_Type;
 
         // Receive all the variables you pass in
-        public TransactionsModel(string? username = "none")
+        public TransactionsModel(string? username = "none", string? type = "none")
         {
             // Assign them to global variables
             m_User = username;
+            m_Type = type;
         }
 
         public string Username
@@ -30,98 +32,44 @@ namespace BradsBank.Views.Home
             }
         }
 
-        public List<List<string>> FullTransactionHistory
+        public List<string> TransactionHistory
         {
             get
             {
-                var HistoryList = new List<List<string>>();
 
-                return HistoryList;
+                string connectionString = "Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
+
+                SqlConnection connection = new SqlConnection(connectionString);
+
+                var valuesList = new List<string>();
+
+
+                connection.Open();
+                //Read from the database
+
+                string getTable = String.Format("SELECT COUNT(*) FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}'  ", m_User);
+
+                if (m_Type == "none")
+                {
+                    getTable = String.Format("SELECT COUNT(*) FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.Username = '{0}'  ", m_User);
+                }
+                else
+                {
+                    getTable = String.Format("SELECT COUNT(*) FROM Transactions JOIN Account ON Account.Account = Transactions.Account WHERE Account.AccountType = '{0}' AND Account.Username = '{1}'  ", m_Type, m_User);
+                }
+                SqlCommand command = new SqlCommand(getTable, connection);
+
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    valuesList.Add((string)dataReader[0]);
+                }
+                connection.Close();
+
+                return valuesList;
+
             }
-        }
-
-        public List<string> PartialTransactionHistory(string accountType)
-        {
-            //var HistoryList = new List<List<string>>();
-
-
-            /*var i = 1;
-            var number = new int[60];
-            var items = new string[60];
-
-            SqlCommand command = new SqlCommand(..., connection); ;
-            var dr = command.ExecuteReader(); ;
-
-
-
-
-            while (dr.Read())
-            {
-                number[i] = Convert.ToInt32(dr[0]);
-                items[i] = Convert.ToString(dr[1]);
-                ...
-
-                              i = i + 1;
-            };
-
-            dr.Close();
-            connection.Close();*/
-
-
-            //private readonly ILogger<HomeController> _logger;
-            // private readonly IConfiguration configuration;
-
-            string connectionString = "Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd" ;
-
-            SqlConnection connection = new SqlConnection(connectionString);
-
-            connection.Open();
-
-            var valuesList = new List<string>();
-
-
-            connection.Open();
-            //Read from the database
-
-            string getTable = String.Format("SELECT COUNT(*) FROM account WHERE accountType = '{0}' ", accountType);
-            SqlCommand command = new SqlCommand(getTable, connection);
-
-            SqlDataReader dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
-            {
-                valuesList.Add((string)dataReader[0]);
-            }
-            connection.Close();
-
-            // Get the transaction history data from the Database
-
-            //item[0], item[1], item[2]
-
-            // HOW IT SHOULD LOOK LIKE
-            // <tr>
-            // <th>Date</th>
-            // <th>Type</th>
-            // <th>Account</th>
-            // <th>Amount</th>
-            // </tr>
-
-            // <tr>
-            // <td>mm/dd/yyyy</td>
-            // <td>Example</td>
-            // <td>Account1</td>
-            // <td>$0.00</td>
-            // </tr>
-
-            // HOW WE WILL RUN IT
-            // <tr>
-            // <td>item[0]</td>
-            // <td>item[1]</td>
-            // <td>item[2]</td>
-            // <td>item[3]</td>
-            // </tr>
-
-            return valuesList;
         }
 
         public void OnGet()
