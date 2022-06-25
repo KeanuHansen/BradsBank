@@ -51,6 +51,7 @@ namespace BradsBank.Views.Home
             {
                 string connectionString = "Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
 
+
                 SqlConnection connection = new SqlConnection(connectionString);
 
                 var returnList = new List<List<string>>();
