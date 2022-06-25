@@ -92,7 +92,12 @@ namespace BradsBank.Controllers
                 if (countUser == 0)
                 {
                     connection.Close();
-                    return RedirectToAction("SignIn", "Home", "Username");
+
+                    string user = "Username";
+                    string goTo = string.Format("/home/SignIn?username={0}", user);
+                    return Redirect(goTo);
+
+                    //return RedirectToAction("SignIn", "Home", "Username");
                 }
 
                 // If not, get a salt
@@ -122,6 +127,10 @@ namespace BradsBank.Controllers
                 else
                 {
                     connection.Close();
+
+                    /*string goTo = string.Format("/home/SignIn?={0}", username);
+                    return Redirect(goTo);*/
+
                     return RedirectToAction("SignIn", "Home", "Password");
                 }
             }
