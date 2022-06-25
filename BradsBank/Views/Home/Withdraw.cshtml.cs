@@ -30,11 +30,12 @@ namespace BradsBank.Views.Home
 
                 string query = String.Format("SELECT CURRENTBALANCE FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = 'Savings' ", m_User);
                 SqlCommand db = new SqlCommand(query, connection);
-                var amount = (string)db.ExecuteScalar();
-                amount = Math.Round(double.Parse(amount) / 100, 2).ToString();
+                var amount = (Int64)db.ExecuteScalar();
+                var amountDiv = double.Parse(amount.ToString()) / 100;
+                string returnAmount = Math.Round(amountDiv, 2).ToString();
                 connection.Close();
 
-                return amount.ToString();
+                return returnAmount.ToString();
             }
         }
 
@@ -48,11 +49,12 @@ namespace BradsBank.Views.Home
 
                 string query = String.Format("SELECT CURRENTBALANCE FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = 'Checking' ", m_User);
                 SqlCommand db = new SqlCommand(query, connection);
-                var amount = (string)db.ExecuteScalar();
-                amount = Math.Round(double.Parse(amount) / 100, 2).ToString();
+                var amount = (Int64)db.ExecuteScalar();
+                var amountDiv = double.Parse(amount.ToString()) / 100;
+                string returnAmount = Math.Round(amountDiv, 2).ToString();
                 connection.Close();
 
-                return amount.ToString();
+                return returnAmount.ToString();
             }
         }
 
@@ -66,11 +68,12 @@ namespace BradsBank.Views.Home
 
                 string query = String.Format("SELECT CURRENTBALANCE FROM ACCOUNT WHERE USERNAME = '{0}' AND ACCOUNTTYPE = 'Credit Card' ", m_User);
                 SqlCommand db = new SqlCommand(query, connection);
-                var amount = (string)db.ExecuteScalar();
-                amount = Math.Round(double.Parse(amount) / 100, 2).ToString();
+                var amount = (Int64)db.ExecuteScalar();
+                var amountDiv = double.Parse(amount.ToString()) / 100;
+                string returnAmount = Math.Round(amountDiv, 2).ToString();
                 connection.Close();
 
-                return amount.ToString();
+                return returnAmount.ToString();
             }
         }
 
