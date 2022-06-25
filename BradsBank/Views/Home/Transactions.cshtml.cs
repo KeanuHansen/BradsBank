@@ -83,7 +83,7 @@ namespace BradsBank.Views.Home
             connection.Open();
             //Read from the database
 
-            string getTable = String.Format("SELECT COUNT(*) FROM Transactoins WHERE Username = '{0}' ", accountType);
+            string getTable = String.Format("SELECT COUNT(*) FROM account WHERE accountType = '{0}' ", accountType);
             SqlCommand command = new SqlCommand(getTable, connection);
 
             SqlDataReader dataReader = command.ExecuteReader();
