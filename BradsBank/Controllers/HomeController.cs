@@ -303,6 +303,17 @@ namespace BradsBank.Controllers
 
         }
 
+        public IActionResult TransactionsAction(string username)
+        {
+            if (username != null)
+            {
+                return View(new TransactionsActionsModel(username));
+            }
+
+            // Pass the variable into the model
+            return View(new TransactionsActionsModel(username));
+        }
+
         public IActionResult AccountActions(string username)
         {
             if (username != null)

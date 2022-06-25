@@ -2,33 +2,6 @@
 @{
 }
 
-<script>
-
-</script>
-
-<!--
-<?php
-$user = 'root';
-$password = '';
-$database = '';
-$servername='localhost:3306';
-
-$mysqli = new mysqli($servername, $user,
-                $password, $database);
-
-// Checking for connections
-if ($mysqli->connect_error) {
-    die('Connect Error (' .
-    $mysqli->connect_errno . ') '.
-    $mysqli->connect_error);
-}
-
-// SQL query to select data from database
-$sql = " SELECT * FROM ... ORDER BY score DESC ";
-$result = $mysqli->query($sql);
-$mysqli->close();
-?>
--->
 <style>
     table, th, td {
         border: 1px solid black;
@@ -36,25 +9,37 @@ $mysqli->close();
         margin-right: auto;
         text-align: center;
         height: 30px;
-        width: 700px;
+        width: 1000px;
     }
 </style>
 
 <div class="text-center">
     <section>
-        <h1>Transactions</h1><br>
+        <h1>@Model.TransactionsType Transactions</h1><br>
         <table>
-
-            @foreach(var row in Model.TransactionHistory)
-            {
+            
+            <thead>
                 <tr>
-                    <td>@row[0]</td>
-                    <td>@row[1]</td>
-                    <td>@row[2]</td>
-                    <td>@row[3]</td>
-                    <td>@row[4]</td>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Before ($)</th>
+                    <th>After ($)</th>
+                    <th>Description</th>
                 </tr>
-            }
+            </thead>
+
+            <tbody>
+                @foreach (var row in Model.TransactionHistory)
+                {
+                    <tr>
+                        <td>@row[0]</td>
+                        <td>@row[1]</td>
+                        <td>@row[2]</td>
+                        <td>@row[3]</td>
+                        <td>@row[4]</td>
+                    </tr>
+                }
+            </tbody>
 
         </table>
     </section>

@@ -1,4 +1,4 @@
-﻿@model BradsBank.Views.Home.AccountActionsModel
+﻿@model BradsBank.Views.Home.TransactionsActionsModel
 @{
 }
 
@@ -37,8 +37,8 @@
 </style>
 
 <div class="action">
-    <h2><a class="accbtn1" href="~/Home/Deposit?username=@Model.Username">Deposit</a></h2><br>
-    <h2><a class="accbtn2" href="~/Home/Withdraw?username=@Model.Username">Withdraw</a></h2><br>
-    <h2><a class="accbtn3" href="~/Home/Transfer?username=@Model.Username">Transfer</a></h2><br>
-    <h2><a class="accbtn4" href="~/Home/TransactionsActions?username=@Model.Username">Transactions</a></h2><br>
+    <h2><a class="accbtn1" href="~/Home/Transactions?username=@Model.Username&type=Deposit">Deposit Transactions</a></h2><br>
+    <h2><a class="accbtn2" href="~/Home/Transactions?username=@Model.Username&type=Withdrawal">Withdrawal Transactions</a></h2><br>
+    <h2><a class="accbtn3" href="~/Home/Transactions?username=@Model.Username&type=Transfer">Transfer Transactions</a></h2><br>
+    <h2><a class="accbtn4" href="~/Home/Transactions?username=@Model.Username&type=All">All Transactions</a></h2><br>
 </div>
