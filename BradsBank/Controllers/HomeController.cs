@@ -93,11 +93,9 @@ namespace BradsBank.Controllers
                 {
                     connection.Close();
 
-                    string user = "Username";
-                    string goTo = string.Format("/home/SignIn?username={0}", user);
-                    return Redirect(goTo);
-
-                    //return RedirectToAction("SignIn", "Home", "Username");
+                    string user_name = "Username";
+                    string go_To = string.Format("/Home/SignIn?username={0}", user_name);
+                    return Redirect(go_To);
                 }
 
                 // If not, get a salt
@@ -121,20 +119,22 @@ namespace BradsBank.Controllers
                     // Close the database
                     connection.Close();
 
-                    string goTo = string.Format("/home/accountactions?username={0}", username);
-                    return Redirect(goTo);
+                    string goToo = string.Format("/home/accountactions?username={0}", username);
+                    return Redirect(goToo);
                 }
                 else
                 {
                     connection.Close();
 
-                    /*string goTo = string.Format("/home/SignIn?={0}", username);
-                    return Redirect(goTo);*/
-
-                    return RedirectToAction("SignIn", "Home", "Password");
+                    string passwords = "Password";
+                    string goTos = string.Format("/Home/SignIn?username={0}", passwords);
+                    return Redirect(goTos);
                 }
             }
-            return RedirectToAction("SignIn", "Home", "Username");
+
+            string user = "Username";
+            string goTo = string.Format("/Home/SignIn?username={0}", user);
+            return Redirect(goTo);
         }
 
         public IActionResult ValidateRegistration(string username, string password, string confirmed, string first, string last, string email)
@@ -186,14 +186,14 @@ namespace BradsBank.Controllers
             return RedirectToAction("Register", "Home", "UserExists");
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string? error = "none")
         {
-            return View(new RegisterModel());
+            return View(new RegisterModel(error));
         }
 
-        public IActionResult SignIn()
+        public IActionResult SignIn(string? error = "none")
         {
-            return View(new SignInModel());
+            return View(new SignInModel(error));
         }
 
         public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
