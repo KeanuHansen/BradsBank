@@ -94,8 +94,17 @@ namespace BradsBank.Controllers
                     connection.Close();
 
                     string user_name = "Username";
-                    string go_To = string.Format("/Home/SignIn?username={0}", user_name);
+                    string go_To = string.Format("/Home/SignIn?error={0}", user_name);
                     return Redirect(go_To);
+                }
+
+                if (password == null || password == "")
+                {
+                    connection.Close();
+
+                    string passwords = "Password";
+                    string goTos = string.Format("/Home/SignIn?error={0}", passwords);
+                    return Redirect(goTos);
                 }
 
                 // If not, get a salt
@@ -127,13 +136,13 @@ namespace BradsBank.Controllers
                     connection.Close();
 
                     string passwords = "Password";
-                    string goTos = string.Format("/Home/SignIn?username={0}", passwords);
+                    string goTos = string.Format("/Home/SignIn?error={0}", passwords);
                     return Redirect(goTos);
                 }
             }
 
             string user = "Username";
-            string goTo = string.Format("/Home/SignIn?username={0}", user);
+            string goTo = string.Format("/Home/SignIn?error={0}", user);
             return Redirect(goTo);
         }
 
@@ -143,7 +152,16 @@ namespace BradsBank.Controllers
             {
                 if (password != confirmed)
                 {
-                    return RedirectToAction("Register", "Home", "MistmatchedPassword");
+                    string password_error = "MistmatchedPassword";
+                    string go_To = string.Format("/Home/Register?error={0}", password_error);
+                    return Redirect(go_To);
+                }
+
+                if (password == null || password == "" || confirmed == null || confirmed == "")
+                {
+                    string password_error = "MistmatchedPassword";
+                    string go_To = string.Format("/Home/Register?error={0}", password_error);
+                    return Redirect(go_To);
                 }
 
                 // Query to see if the user exists
@@ -160,7 +178,10 @@ namespace BradsBank.Controllers
                 if (countUser > 0)
                 {
                     connection.Close();
-                    return RedirectToAction("Register", "Home", "UserExists");
+
+                    string user_error = "UserExists";
+                    string go_To2 = string.Format("/Home/Register?error={0}", user_error);
+                    return Redirect(go_To2);
                 }
 
                 // If not, get a salt
@@ -183,7 +204,9 @@ namespace BradsBank.Controllers
                 return Redirect(goTo);
             }
 
-            return RedirectToAction("Register", "Home", "UserExists");
+            string final_error = "UserExists";
+            string go_To3 = string.Format("/Home/Register?error={0}", final_error);
+            return Redirect(go_To3);
         }
 
         public IActionResult Register(string? error = "none")
