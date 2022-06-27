@@ -219,7 +219,7 @@ namespace BradsBank.Controllers
             return View(new SignInModel(error));
         }
 
-        public IActionResult WithdrawMoney (string username, string accountFrom, int amount)
+        public IActionResult WithdrawMoney(string username, string accountFrom, double amount)
         {
             //Abdul start:
 
