@@ -243,11 +243,6 @@ namespace BradsBank.Controllers
             db = new SqlCommand(withdrawQuery, connection);
             db.ExecuteNonQuery();
 
-            //make amount in dollars before displaying it
-            amount /= 100;
-
-
-
             //sql statement to send this new accoutFrom and update the balance avaliable on that specific account
 
 
