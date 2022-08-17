@@ -8,7 +8,7 @@ Below are a few screenshots of the project:
 
 The technology that we used was a SQL database connected to ASP.net MVC core, using Razor pages.
 
-I worked on the functionality that made it connect from pages to pages, and it also was able to do validation on the sign in and registration. I also built various backend pages on the razor.cs pages that were there, but I will only post a few snippets, so you won't see all the functionality.
+I worked on the functionality that made it connect from pages to pages, and it also was able to do validation on the sign in and registration. I also built various backend pages on the razor.cs pages that were there, but I will only post a few snippets, so you won't see all the functionality. We ran into challenges learning how to connect the database to the code, especially due to the machine the database was hosted on, but we were able to figure it out by using a VPN.
 
 Snippets of code I worked on are posted below:
 
