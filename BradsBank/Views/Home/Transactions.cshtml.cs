@@ -49,7 +49,7 @@ namespace BradsBank.Views.Home
         {
             get
             {
-                string connectionString = "Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+his!$TheP@$$w0rd";
+                string connectionString = "Server=titan.cs.weber.edu, 10433;Database=AmandaShow;User ID=AmandaShow;Password=+h1sIsthenewP@ssword!";
 
 
                 SqlConnection connection = new SqlConnection(connectionString);
